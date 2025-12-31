@@ -135,7 +135,7 @@
             <!-- THANH ÂM LƯỢNG -->
             <div class="volume-control">
                 <span>🔊</span>
-                <input type="range" id="volumeSlider" min="0" max="100" value="10">
+                <input type="range" id="volumeSlider" min="0" max="100" value="50">
             </div>
         </div>
     </div>
@@ -168,7 +168,7 @@
         let currentIndex = 0;
 
         // ✅ Mặc định 10%
-        audio.volume = 0.1;
+        audio.volume = 0.5;
 
         // Kéo volume → bật tiếng
         slider.addEventListener('input', (e) => {
@@ -215,4 +215,5 @@
     </script>
 
 </body>
+
 </html>
