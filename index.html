@@ -14,14 +14,31 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('vo.jpg') center center / 35% no-repeat;
+            background: url('vo.jpg') center center / contain no-repeat;
             background-attachment: fixed;
+            background-size: contain;
+            background-position: center center;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
+
+        @media (max-width: 768px) {
+            body {
+                background-size: 100% auto;
+                background-attachment: scroll;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                background-size: cover;
+                background-position: center top;
+            }
+        }
+
 
         .container {
             background: white;
@@ -242,3 +259,4 @@
 
 </body>
 </html>
+
