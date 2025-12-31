@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc vợ</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* NỀN BLUR */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url('maxresdefault.jpg') center center / cover no-repeat;
+            filter: blur(6px) brightness(0.9);
+            transform: scale(1.05);
+            z-index: -1;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in;
+            cursor: pointer;
+        }
+
+        .gif-header {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .content {
+            padding: 40px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .text-display {
+            font-size: 19px;
+            font-weight: 500;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+
+        .text-display.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .text-display.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-display.special {
+            font-weight: 700;
+            font-size: 21px;
+            color: #e25555;
+        }
+
+        .click-hint {
+            color: #999;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        /* THANH ÂM LƯỢNG */
+        .volume-control {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-control span {
+            font-size: 18px;
+        }
+
+        .volume-control input[type="range"] {
+            width: 160px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NHẠC NỀN -->
+    <audio id="backgroundMusic" autoplay loop muted>
+        <source src="anhsang.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="container">
+        <img src="umaru.gif" alt="Umaru" class="gif-header">
+
+        <div class="content">
+            <p class="text-display" id="textDisplay">2025 sắp kết thúc òi</p>
+            <div class="click-hint" id="clickHint">Click để xem tiếp...</div>
+
+            <!-- THANH ÂM LƯỢNG -->
+            <div class="volume-control">
+                <span>🔊</span>
+                <input type="range" id="volumeSlider" min="0" max="100" value="10">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('backgroundMusic');
+        const slider = document.getElementById('volumeSlider');
+        const container = document.getElementById('container');
+        const textDisplay = document.getElementById('textDisplay');
+        const clickHint = document.getElementById('clickHint');
+
+        // Danh sách tất cả các dòng text
+        const messages = [
+            '2025 sắp kết thúc òi',
+            'anh chỉ muốn nói lời cảm ơn',
+            'vì chúng ta đã gặp được nhau ạ',
+            'vì yêu mà đến vì thương mà ở lại',
+            'vì hiểu nhau mà nhường nhịn ạ',
+            'cảm ơn em đã cho anh cơ hội được yêu em',
+            'cảm ơn em đã trân trọng tình cảm của anh ạ',
+            'cái thứ tình cảm trai gái mà anh chưa từng được nhận trước đây ạ',
+            'anh biết tầm tuổi này nói yêu nhau mãi mãi là rất khó',
+            'nhưng thật sự anh rất muốn thương yêu vợ thật lâu ạ',
+            'sang năm mới chồng chúc vợ và gia đình có nhiều sức khoẻ nha ạ',
+            'tiền vào như nước còn trả anh 2 tỉ nữa nhóoo',
+            'yêu em nhiều ạ hì hì ❤️'
+            
+        ];
+
+        let currentIndex = 0;
+
+        // ✅ Mặc định 10%
+        audio.volume = 0.1;
+
+        // Kéo volume → bật tiếng
+        slider.addEventListener('input', (e) => {
+            e.stopPropagation();
+            audio.muted = false;
+            audio.volume = slider.value / 100;
+        });
+
+        // Click lần đầu → cho phép phát tiếng
+        document.addEventListener('click', () => {
+            audio.muted = false;
+            audio.play().catch(() => {});
+        }, { once: true });
+
+        // Hàm thay đổi text
+        function changeText() {
+            if (currentIndex < messages.length - 1) {
+                // Fade out
+                textDisplay.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    currentIndex++;
+                    textDisplay.textContent = messages[currentIndex];
+                    
+                    // Thêm class special cho dòng cuối
+                    if (currentIndex === messages.length - 1) {
+                        textDisplay.classList.add('special');
+                        clickHint.style.display = 'none';
+                    }
+                    
+                    // Fade in
+                    textDisplay.classList.remove('fade-out');
+                    textDisplay.classList.add('fade-in');
+                }, 400);
+            }
+        }
+
+        // Click vào container để đổi text (trừ khi click vào slider)
+        container.addEventListener('click', (e) => {
+            if (e.target !== slider && e.target.parentElement !== slider.parentElement) {
+                changeText();
+            }
+        });
+    </script>
+
+</body>
+</html>

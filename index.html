@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Câu hỏi đặc biệt</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('vo.jpg') center center / 35% no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        /* ===== ẢNH ===== */
+        .container img,
+        .modal-content img,
+        .alert-modal img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .modal-heart {
+            max-width: 260px;
+        }
+
+        .alert-modal img {
+            max-width: 220px;
+        }
+
+        /* ===== BUTTON ===== */
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .button-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-1 { background: linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
+        .btn-2 { background: linear-gradient(135deg,#f093fb,#f5576c); color:#fff; }
+        .btn-3 { background: linear-gradient(135deg,#4facfe,#00f2fe); color:#fff; }
+        .btn-4 { background: linear-gradient(135deg,#43e97b,#38f9d7); color:#fff; }
+
+        button:hover {
+            transform: translateY(-3px);
+        }
+
+        /* ===== VOLUME ===== */
+        .volume-control {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .volume-control input {
+            width: 180px;
+            cursor: pointer;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content,
+        .alert-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in;
+            max-width: 420px;
+            width: 90%;
+        }
+
+        .alert-modal h2 {
+            color: #e25555;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .alert-close-btn {
+            padding: 10px 30px;
+            background: linear-gradient(135deg,#f093fb,#f5576c);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .alert-close-btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NHẠC NỀN -->
+<audio id="bgMusic" autoplay loop muted>
+    <source src="cute.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+    <img src="download.gif" class="modal-heart">
+    <h1>Em có yêu chồng hămm?</h1>
+
+    <div class="button-container">
+        <button class="btn-2" onclick="showAlertModal()">không yêu</button>
+        <button class="btn-1" onclick="showModal()">ok</button>
+        <button class="btn-3" onclick="showModal()">ui xời ơi lại chả yêu</button>
+        <button class="btn-4" onclick="showModal()">em coáaaa</button>
+    </div>
+
+    <div class="volume-control">
+        <span>🔊</span>
+        <input type="range" id="volumeSlider" min="0" max="100" value="10">
+    </div>
+</div>
+
+<!-- MODAL ĐÚNG -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <img src="download (1).gif">
+        <h2>hị hị anh yêu vợ thí 💕</h2>
+    </div>
+</div>
+
+<!-- MODAL SAI -->
+<div class="modal-overlay" id="alertModal" onclick="closeAlertModal(event)">
+    <div class="alert-modal" onclick="event.stopPropagation()">
+        <img src="meo.jpg">
+        <h2>j đấy cái j đấyyyyy chọn lại đê vợ eiii</h2>
+        <button class="alert-close-btn" onclick="closeAlertModal()">OK</button>
+    </div>
+</div>
+
+<script>
+    const audio = document.getElementById('bgMusic');
+    const slider = document.getElementById('volumeSlider');
+
+    audio.volume = 0.1;
+
+    document.addEventListener('click', () => {
+        audio.muted = false;
+        audio.play().catch(()=>{});
+    }, { once: true });
+
+    slider.addEventListener('input', () => {
+        audio.muted = false;
+        audio.volume = slider.value / 100;
+    });
+
+    function showModal() {
+        document.getElementById('modalOverlay').classList.add('show');
+        setTimeout(() => {
+            window.location.href = 'chuc-vo.html';
+        }, 5000);
+    }
+
+    function showAlertModal() {
+        document.getElementById('alertModal').classList.add('show');
+    }
+
+    function closeModal(e) {
+        if (e && e.target !== e.currentTarget) return;
+        document.getElementById('modalOverlay').classList.remove('show');
+    }
+
+    function closeAlertModal(e) {
+        if (e && e.target !== e.currentTarget) return;
+        document.getElementById('alertModal').classList.remove('show');
+    }
+</script>
+
+</body>
+</html>
